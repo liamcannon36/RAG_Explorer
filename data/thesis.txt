@@ -48,40 +48,6 @@ uals with I/DD, and analyzed the findings. We analyzed this feedback, and found
 that participants largely enjoyed Bodhi and would use it for self-regulation. Lastly,
 we discuss the implications of our research and identify future areas of research
 that should be explored.
-ACKNOWLEDGMENTS
-First, I would like to give thanks to my major advisor, Dr. Krishna Venkata-
-subramanian. I want to thank him for introducing human-based computing and
-accessibility to me, and giving me a fantastic opportunity to work in the ASSET
-lab. In these past few years, not only has he guided me in becoming a competent
-researcher, but also in becoming a greater critical thinker and more proactive in
-everything I do. If it wasn’t for him, I may very well have still been writing the first
-page! I would also like to thank Profs. Shaun Wallace, and Kunal Mankodiya for
-serving on my committee, and Prof. Margaret Frost for chairing the committee.
-Their feedback has been invaluable and I greatly appreciate them taking time out
-of their busy schedule to aid my research.
-Next, I would like to thank my collaborators Dr. Tina-Marie Ranall, an
-affiliate of the Modern and Classical Languages and Literature Department at the
-University of Rhode Island (URI), and Priyankan Kirupaharan, a PhD student
-in the Accessible and Socially Aware Technologies Lab at URI, for their work on
-the Bodhi app. It was a pleasure to work with them, and I’ve gained a wealth of
-experience in the process. I would also like to thank all the undergraduate students
-who supported Bodhi as well, namely Osman Barrie, Matthew Langton, Brandon
-Charette, Leslie Ortiz, and Jude Ramanan. Also, I would like to thank all of the
-members of the I/DD community whose work and input inspired the activities in
-the app. Similarly, I deeply appreciate all the participants who graciously gave us
-their time, and played a massive role in shaping Bodhi.
-I would also like to thank my grandparents, who have supported me in every
-endeavor in which I choose and have always shown interest in my work. I would
-also like to thank my partner, Olivia Martin, who helped me with all my mock
-interviews, presentations, and always encouraged me to keep going as I was falling
-iii
-asleep at my computer! I would also like to thank my fellow graduate computer
-science students Arlen Dumas and Yusra Suhail for always letting me bounce ideas
-off them and inspiring me to be the best that I can be.
-Finally, I would like to thank the Disabled Persons Protection Commission
-(DPPC) and Massachusetts Advocates Standing Strong (MASS) for supporting
-this work.
-iv
 TABLE OF CONTENTS
 ABSTRACT . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . ii
 ACKNOWLEDGMENTS . . . . . . . . . . . . . . . . . . . . . . . . . . iii
