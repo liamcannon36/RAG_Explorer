@@ -1,0 +1,14 @@
+[project]
+name = "naive-rag"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+    "anthropic>=0.116.0",
+    "chromadb>=1.5.9",
+    "dotenv>=0.9.9",
+    "pinecone>=9.1.0",
+    "scikit-learn>=1.9.0",
+    "sentence-transformers>=5.6.0",
+]
