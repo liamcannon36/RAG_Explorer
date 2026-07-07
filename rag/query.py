@@ -13,6 +13,6 @@ def query(user_question: str, chunks: list[list[float]], docs: list[str], topk: 
 
     indices = np.argsort(distances[0])[::-1][:topk]
     top_docs = [docs[i] for i in indices]
-    print([distances[0][i] for i in indices])
+    # print([distances[0][i] for i in indices])
 
     return top_docs

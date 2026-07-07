@@ -30,7 +30,7 @@ def main():
     docs = load_docs(Path("data"))
 
     chunks = chunk(docs)
-    print("number of chunks: ", len(chunks))
+    # print("number of chunks: ", len(chunks))
 
 
 if __name__ == "__main__":
