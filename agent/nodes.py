@@ -66,14 +66,12 @@ def answer(state: State):
     return {"current_agent_response": message.content[0].text.strip()}
 
 
-def make_retrieve(chunks: list[str], embedded_chunks: list[list[float]]):
+def make_retrieve(chunks: list[str], index):
     def retrieve(state: State):
         print(
             f"\n[Retrieve] Attempt #{state['rag_retry_count'] + 1} for: {state['user_question']}"
         )
-        semantic_indices = semantic_query(
-            state["user_question"], embedded_chunks, chunks, topk=5
-        )
+        semantic_indices = semantic_query(state["user_question"], index, topk=5)
 
         keyword_indices = keyword_query(state["user_question"], chunks, topk=5)
 

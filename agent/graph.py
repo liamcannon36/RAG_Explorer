@@ -10,14 +10,14 @@ from agent.nodes import answer, check_answer, make_retrieve, router
 from agent.state import State
 
 
-def build_graph(chunks, embedded_chunks) -> CompiledStateGraph:
+def build_graph(chunks, index) -> CompiledStateGraph:
     workflow = StateGraph(State)
     workflow.add_node("Answer", answer)
     workflow.add_node("Check_answer", check_answer)
     workflow.add_node("Router", router)
 
     # Build retrieve node from context)
-    retrieve_node = make_retrieve(chunks, embedded_chunks)
+    retrieve_node = make_retrieve(chunks, index)
     workflow.add_node("Retrieve", retrieve_node)
 
     workflow.add_edge(START, "Router")
