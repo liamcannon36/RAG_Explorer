@@ -13,11 +13,12 @@ def load_docs(folder: Path) -> list[str]:
 
 
 # chunk size is in words.
-def chunk(docs: list[str], chunk_size: int = 500) -> list[str]:
+def chunk(docs: list[str], chunk_size: int = 500, overlap=100) -> list[str]:
     chunks = []
     for doc in docs:
         words = doc.split(" ")
-        for i in range(0, len(words), chunk_size):
+        # Jumps b
+        for i in range(0, len(words), chunk_size - overlap):
             chunk = " ".join(words[i : i + chunk_size])
             # print(chunk)
             chunks.append(chunk)

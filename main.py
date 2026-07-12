@@ -5,17 +5,24 @@ from dotenv import load_dotenv
 from agent.graph import build_graph
 from rag.chunk import chunk, load_docs
 from rag.embed import embed
+from rag.store import get_index, is_populated, load_chunks, save
 
 load_dotenv()
 
 
 def main():
-    # ingest pipeline (runs once at startup)
-    docs = load_docs(Path("data"))
-    chunks = chunk(docs)
-    embedded_chunks = embed(chunks)
+    index = get_index()
 
-    graph = build_graph(chunks, embedded_chunks)
+    if is_populated(index):
+        chunks = load_chunks()
+        print(f"[Store] Loaded {len(chunks)} chunks from cache.")
+    else:
+        docs = load_docs(Path("data"))
+        chunks = chunk(docs)
+        embeddings = embed(chunks)
+        save(index, chunks, embeddings)
+
+    graph = build_graph(chunks, index)
 
     with open("graph.md", "w") as f:
         f.write("```mermaid\n")
