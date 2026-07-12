@@ -1,7 +1,9 @@
 import anthropic
 
 from agent.state import State
-from rag.query import query
+from rag.combine_ranked_docs import rrf
+from rag.keyword_query import keyword_query
+from rag.semantic_query import semantic_query
 
 # router -> decides rag or general (changes state to match that)
 
@@ -69,10 +71,31 @@ def make_retrieve(chunks: list[str], embedded_chunks: list[list[float]]):
         print(
             f"\n[Retrieve] Attempt #{state['rag_retry_count'] + 1} for: {state['user_question']}"
         )
-        top_docs = query(state["user_question"], embedded_chunks, chunks, topk=5)
-        print(f"[Retrieve] Got {len(top_docs)} chunks")
+        semantic_indices = semantic_query(
+            state["user_question"], embedded_chunks, chunks, topk=5
+        )
+
+        keyword_indices = keyword_query(state["user_question"], chunks, topk=5)
+
+        print("\n[Retrieve] Keyword ranking (BM25):")
+        for rank, idx in enumerate(keyword_indices):
+            preview = chunks[idx][:80].replace("\n", " ")
+            print(f"  {rank + 1}. chunk[{idx}]: {preview!r}")
+
+        print("\n[Retrieve] Semantic ranking (cosine similarity):")
+        for rank, idx in enumerate(semantic_indices):
+            preview = chunks[idx][:80].replace("\n", " ")
+            print(f"  {rank + 1}. chunk[{idx}]: {preview!r}")
+
+        top_combined_docs = rrf(keyword_indices, semantic_indices, chunks=chunks, k=60)
+
+        print("\n[Retrieve] Combined ranking (RRF):")
+        for rank, doc in enumerate(top_combined_docs):
+            preview = doc[:80].replace("\n", " ")
+            print(f"  {rank + 1}. {preview!r}")
+
         return {
-            "returned_docs": top_docs,
+            "returned_docs": top_combined_docs,
             "rag_retry_count": state["rag_retry_count"] + 1,
         }
 
