@@ -2,7 +2,10 @@ import anthropic
 
 from agent.state import State
 from rag.combine_ranked_docs import rrf
+from rag.constants import MODEL
 from rag.keyword_query import keyword_query
+from rag.mmr import mmr
+from rag.rerank import rerank
 from rag.semantic_query import semantic_query
 
 # router -> decides rag or general (changes state to match that)
@@ -87,13 +90,25 @@ def make_retrieve(chunks: list[str], index):
 
         top_combined_docs = rrf(keyword_indices, semantic_indices, chunks=chunks, k=60)
 
+        reranked_docs = rerank(state["user_question"], top_combined_docs)[:5]
+
+        reranked_embedded_docs = MODEL.encode(reranked_docs).tolist()
+
+        docs = mmr(
+            state["user_question"],
+            reranked_embedded_docs,
+            reranked_docs,
+            top_k=5,
+            lambda_var=0.5,
+        )
+
         print("\n[Retrieve] Combined ranking (RRF):")
-        for rank, doc in enumerate(top_combined_docs):
+        for rank, doc in enumerate(docs):
             preview = doc[:80].replace("\n", " ")
             print(f"  {rank + 1}. {preview!r}")
 
         return {
-            "returned_docs": top_combined_docs,
+            "returned_docs": docs,
             "rag_retry_count": state["rag_retry_count"] + 1,
         }
 
