@@ -6,7 +6,7 @@ from langgraph.graph import END, START, StateGraph
 from langgraph.graph.state import CompiledStateGraph
 from typing_extensions import TypedDict
 
-from agent.nodes import answer, check_answer, make_retrieve, router
+from agent.nodes import answer, check_answer, make_retrieve, rephrase_question, router
 from agent.state import State
 
 
@@ -20,6 +20,8 @@ def build_graph(chunks, index) -> CompiledStateGraph:
     retrieve_node = make_retrieve(chunks, index)
     workflow.add_node("Retrieve", retrieve_node)
 
+    workflow.add_node("Rephrase", rephrase_question)
+
     workflow.add_edge(START, "Router")
     workflow.add_conditional_edges(
         "Router",
@@ -28,7 +30,6 @@ def build_graph(chunks, index) -> CompiledStateGraph:
     )
 
     workflow.add_edge("Retrieve", "Answer")
-
 
     workflow.add_conditional_edges(
         "Answer",
@@ -41,8 +42,11 @@ def build_graph(chunks, index) -> CompiledStateGraph:
         lambda state: (
             "end"
             if state["answer_sufficient"] or state["rag_retry_count"] >= 3
-            else "retrieve"
+            else "Rephrase"
         ),
-        {"end": END, "retrieve": "Retrieve"},
+        {"end": END, "Rephrase": "Rephrase"},
     )
+
+    workflow.add_edge("Rephrase", "Retrieve")
+
     return workflow.compile()

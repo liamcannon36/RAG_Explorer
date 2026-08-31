@@ -74,9 +74,14 @@ def make_retrieve(chunks: list[str], index):
         print(
             f"\n[Retrieve] Attempt #{state['rag_retry_count'] + 1} for: {state['user_question']}"
         )
-        semantic_indices = semantic_query(state["user_question"], index, topk=5)
-
-        keyword_indices = keyword_query(state["user_question"], chunks, topk=5)
+        if state["rephrased_question"]:
+            semantic_indices = semantic_query(
+                state["rephrased_question"], index, topk=5
+            )
+            keyword_indices = keyword_query(state["rephrased_question"], chunks, topk=5)
+        else:
+            semantic_indices = semantic_query(state["user_question"], index, topk=5)
+            keyword_indices = keyword_query(state["user_question"], chunks, topk=5)
 
         print("\n[Retrieve] Keyword ranking (BM25):")
         for rank, idx in enumerate(keyword_indices):
@@ -134,3 +139,22 @@ def check_answer(state: State):
         f"[Check Answer] Sufficient: {is_sufficient} (retry count: {state['rag_retry_count']})"
     )
     return {"answer_sufficient": is_sufficient}
+
+
+def rephrase_question(state: State):
+    client = anthropic.Anthropic()
+
+    message = client.messages.create(
+        model="claude-sonnet-4-5",
+        max_tokens=300,
+        messages=[
+            {
+                "role": "user",
+                "content": f"""The following question was asked: {state["user_question"]}.
+                 The following answer was retrieved but was insufficient: {state["current_agent_response"]}.
+                 Rephrase the original question to be more specific or approach it from a different angle, so that a document retrieval system can
+                 find better information to answer it. Return only the rephrased question, nothing else.""",
+            }
+        ],
+    )
+    return {"rephrased_question": message.content[0].text.strip()}

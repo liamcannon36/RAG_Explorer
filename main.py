@@ -37,6 +37,7 @@ def main():
         result = graph.invoke(
             {
                 "user_question": user_input,
+                "rephrased_question": None,
                 "returned_docs": None,
                 "current_agent_response": None,
                 "routing_decision": None,
